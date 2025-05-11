@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — Мой Блог{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <!-- Карточка с постом -->
+    <div class="card shadow-sm mb-4">
+        {% if post.image_filename %}
+            <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}"
+                 alt="Изображение поста" class="card-img-top rounded-top" style="max-height: 500px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+            <h1 class="card-title">{{ post.title }}</h1>
+            <p class="card-text" style="white-space: pre-line;">{{ post.content }}</p>
+            <div class="d-flex justify-content-between align-items-center text-muted mt-4">
+                <small>
+                    <i class="bi bi-person"></i> {{ post.author.username }}
+                </small>
+                <small>
+                    <i class="bi bi-clock"></i> {{ post.created_at.strftime('%d.%m.%Y %H:%M') }}
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="mt-5">
+        <h3>Комментарии</h3>
+        <!-- Форма для комментариев -->
+        {% if current_user.is_authenticated %}
+            <form method="POST">
+                {{ comment_form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ comment_form.content.label(class="form-label") }}
+                    {{ comment_form.content(class="form-control", rows=3) }}
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить комментарий</button>
+            </form>
+        {% else %}
+            <p class="text-muted">Войдите, чтобы оставлять комментарии.</p>
+        {% endif %}
+        <!-- Список комментов -->
+        {% if post.comments %}
+            <hr>
+            {% for comment in post.comments %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted d-flex justify-content-between">
+                            <span><strong>{{ comment.author.username }}</strong></span>
+                            <small>{{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                        </h6>
+                        <p class="card-text">{{ comment.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted mt-3">Пока нет комментариев. Будьте первым!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Редактировать аватар — {{ current_user.username }}{% endblock %}
+{% block content %}
+<h1>Редактировать аватар</h1>
+
+<div class="text-center mb-4">
+    <img src="{{ avatar_url }}" alt="Аватар" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+</div>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="POST" action="{{ url_for('edit_profile') }}" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="avatar" class="form-label">Выберите изображение</label>
+        <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary">Обновить аватар</button>
+</form>
+{% endblock %}

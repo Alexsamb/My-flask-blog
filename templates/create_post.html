@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Создать пост</h1>
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control", value=request.form.title if request.method == 'POST' else '') }}
+        </div>
+        <div class="mb-3">
+            {{ form.content.label(class="form-label") }}
+            {{ form.content(class="form-control", rows=5, value=request.form.content if request.method == 'POST' else '') }}
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Изображение (до 5 МБ, форматы: .jpg, .jpeg, .png)</label>
+            <input type="file" name="image" id="image" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Опубликовать</button>
+    </form>
+{% endblock %}
